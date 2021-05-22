@@ -1,0 +1,16 @@
+#' @title ...
+#' @name ANOVA
+#'
+#' @description ...
+#'
+#' @param dataset ...
+#' @param var1 ...
+#' @param var2 ...
+#'
+#' @author Felipe Ferreira
+
+ANOVA <-
+function(dataset,var1,var2){
+  modelo<-aov(dataset[[var1]]~dataset[[var2]])
+  return(modelo)
+}

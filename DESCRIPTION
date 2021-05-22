@@ -1,18 +1,19 @@
 Package: USK
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Unbalanced Scott-Knott
+Version: 1.0.0.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Felipe","Ferreira",email="felipe179971@hotmail.com",role = c("aut", "cre"))
+Description: Descrição.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/felipe179971/USK
 BugReports: https://github.com/felipe179971/USK/issues
+Imports: 
+    dplyr,
+    ggplot2,
+    pkgcond,
+    plotly,
+    purrr
