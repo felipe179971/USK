@@ -21,13 +21,13 @@
 #' @examples
 #'
 #' taus=c(4,4,-4,-4,9,-9)
-#' Tratamentoo<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
+#' Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 #' erro<-rnorm(3*length(taus),0,1)
-#' yy<-2+taus+erro
-#' yy[round(runif(1,min=1,max=length(yy)),0)]<-NA
-#' dados<-data.frame(yy,Tratamentoo)
+#' y<-2+taus+erro
+#' y[round(runif(1,min=1,max=length(y)),0)]<-NA
+#' dados<-data.frame(y,Tratamento)
 #'
-#' usktest(yy~Tratamentoo,dados)
+#' usktest(y~Tratamento,dados)
 #'
 #' @return This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
 #' \itemize{
