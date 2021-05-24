@@ -4,14 +4,12 @@
 \alias{ANOVA}
 \title{...}
 \usage{
-ANOVA(dataset, var1, var2)
+ANOVA(formula, dataset)
 }
 \arguments{
+\item{formula}{}
+
 \item{dataset}{...}
-
-\item{var1}{...}
-
-\item{var2}{...}
 }
 \description{
 ...
