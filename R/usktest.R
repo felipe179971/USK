@@ -27,8 +27,12 @@
 #' y[round(runif(1,min=1,max=length(y)),0)]<-NA
 #' dados<-data.frame(y,Tratamento)
 #'
-#' usktest(y~Tratamento,dados)
-#'
+#' test<-usktest(y~Tratamento,dados)
+#' #Plotly
+#' plotly_usk(test)
+#' #GGplot2
+#' plot_usk(test)
+#' #plotly_usk(test)
 #' @return This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
 #' \itemize{
 #'  \item '\code{treatments}': treatments.
@@ -42,34 +46,32 @@
 #' @export
 
 usktest <-
-function(formula,dataset,alpha=0.05,graphic=TRUE,ANOVA=TRUE){
-  var1<-as.character(formula[[2]])
-  var2<-as.character(formula[[3]])
-  if(length(as.character(formula[[3]]))>1){
-    stop("At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
-  }else if(is.factor(dataset[[var2]])==FALSE){
-    stop(paste0("The variable '",as.character(formula[[3]]),"' must be factor"))
-  }else if(is.numeric(dataset[[var1]])==FALSE){
-    stop(paste0("The variable '",as.character(formula[[2]]),"' must be numeric"))
-  }else if(length(unique(dataset[[var2]]))<2){
-    stop(paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment"))
-  }else if(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0){
-    stop(paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
-  }else{
-    if(graphic==T){
-      Graphic(as.data.frame(RUNscott(dataset,var1,var2,alpha,ANOVA(formula,dataset)[["df.residual"]],summary(ANOVA(formula,dataset))[[1]][["Mean Sq"]][[2]])))
-    }
-    if(ANOVA==T){
-      Anova<-data.frame(summary(ANOVA(formula,dataset))[[1]])
-      rownames(Anova)[1]<-var2
-      print("##########################ANOVA###########################")
-      print(Anova)
-      print("#######################Scott-Knott########################")
+  function(formula,dataset,alpha=0.05,ANOVA=TRUE){
+    var1<-as.character(formula[[2]])
+    var2<-as.character(formula[[3]])
+    if(length(as.character(formula[[3]]))>1){
+      stop("At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
+    }else if(is.factor(dataset[[var2]])==FALSE){
+      stop(paste0("The variable '",as.character(formula[[3]]),"' must be factor"))
+    }else if(is.numeric(dataset[[var1]])==FALSE){
+      stop(paste0("The variable '",as.character(formula[[2]]),"' must be numeric"))
+    }else if(length(unique(dataset[[var2]]))<2){
+      stop(paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment"))
+    }else if(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0){
+      stop(paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
+    }else{
+      Result<-RUNscott(dataset,var1,var2,alpha,ANOVA(formula,dataset)[["df.residual"]],summary(ANOVA(formula,dataset))[[1]][["Mean Sq"]][[2]])
+      colnames(Result)[1]<-var2
 
+      Resultado<-as.list(c(var1,var2,Result))
+      if(ANOVA==T){
+        Anova<-summary(ANOVA(formula,dataset))
+        print("##########################ANOVA###########################")
+        print(Anova)
+        print("#######################Scott-Knott########################")
+        Resultado<-as.list(c(var1,var2,Anova,Result))
+      }
+      print(Result[,-6])
+      invisible(Resultado)
     }
-    Result<-RUNscott(dataset,var1,var2,alpha,ANOVA(formula,dataset)[["df.residual"]],summary(ANOVA(formula,dataset))[[1]][["Mean Sq"]][[2]])[,-6]
-    colnames(Result)[1]<-var2
-    return(Result)
   }
-}
-

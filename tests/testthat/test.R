@@ -32,35 +32,47 @@ resultado_099<-data.frame(
   min=c(11.8 ,5.92,4.98,-2.23,-2.82,-7.17),
   max=c(12.2  ,7.72 ,6.97 ,-0.409,-1.63 ,-6.36 )
 )
-#Testando o gráfico
-verificar_grafico<-function(alpha){
-  grafico<-usktest(y~Tratamento,dados,ANOVA=F,graphic=T,alpha=alpha)
-  colnames(grafico)[1]<-"Treatment"
-  grafico$Ordem<-c(1:6)
-  return(USK:::Graphic(grafico)$x$data[[3]]$text[1])
-}
-grafico_005<-verificar_grafico(0.05)
-grafico_099<-verificar_grafico(0.99)
+#Testando os plots
+teste_005<-usktest(y~Tratamento,dados,ANOVA=F)
+teste_099<-usktest(y~Tratamento,dados,ANOVA=F,alpha=0.99)
+#Testando nomes diferentes das variáveis
+dados$Tratamento_nome_diferente<-as.factor(dados$Tratamento)
+dados$y_nome_diferente<-as.numeric(dados$y)
+
 
 ####TESTE##########
+#Erros
 expect_error(usktest(y_factor~Tratamento,dados),"The variable 'y_factor' must be numeric")
 expect_error(usktest(y~Tratamento_character,dados),"The variable 'Tratamento_character' must be factor")
 expect_error(usktest(y_1var_NA~Tratamento,dados),"All 'Tratamento' must have more than 1 observations")
 expect_error(usktest(y~Tratamento_unico,dados),"The variable 'Tratamento_unico' must have more than 1 type of treatment")
 expect_error(usktest(y~Tratamento+Tratamento_unico,dados),"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
-#expect_equal(as.character(capture.output(usktest(y~Tratamento,dados,ANOVA=F,graphic=F))[1]),"\033[38;5;246m# A tibble: 6 x 5\033[39m")
-expect_equal(capture.output(usktest(y~Tratamento,dados,graphic=F))[1],"[1] \"##########################ANOVA###########################\"")
-expect_equal(capture.output(usktest(y~Tratamento,dados))[3],"Tratamento   5 710.660096 142.1320191 230.4221 9.573813e-11")
-expect_equal(grafico_005,"Mean: -1.46<br />Treatment: trat 3<br />Group: c")
-expect_equal(grafico_099,"Mean:  5.98<br />Treatment: trat 1<br />Group: c")
+#Gráfico
+expect_equal(as.character(plot_usk(teste_005)$data$Group[6]),"d")
+expect_equal(as.character(plot_usk(teste_099)$data$Group[6]),"f")
+expect_equal(as.numeric(plotly_usk(teste_005)$x$data[[4]]$error_x$array),0.4331921,tolerance=0.01)
+expect_equal(as.numeric(plotly_usk(teste_099)$x$data[[4]]$error_x$array),1.051205,tolerance=0.01)
 
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F)$Tratamento,resultado_005$Tratamento)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F)$Group,resultado_005$Group)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F)$Mean,resultado_005$Mean,tolerance=0.05)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F)$min,resultado_005$min,tolerance=0.05)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F)$max,resultado_005$max,tolerance=0.05)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$Tratamento,resultado_099$Tratamento)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$Group,resultado_099$Group)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$Mean,resultado_099$Mean,tolerance=0.05)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$min,resultado_099$min,tolerance=0.05)
-expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$max,resultado_099$max,tolerance=0.05)
+#Alpha
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F)$Tratamento,resultado_005$Tratamento)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F)$Group,resultado_005$Group)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F)$Mean,resultado_005$Mean,tolerance=0.01)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F)$min,resultado_005$min,tolerance=0.01)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F)$max,resultado_005$max,tolerance=0.01)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F,alpha=0.99)$Tratamento,resultado_099$Tratamento)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F,alpha=0.99)$Group,resultado_099$Group)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F,alpha=0.99)$Mean,resultado_099$Mean,tolerance=0.01)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F,alpha=0.99)$min,resultado_099$min,tolerance=0.01)
+expect_equal(usktest(y~Tratamento,dados,ANOVA = F,alpha=0.99)$max,resultado_099$max,tolerance=0.01)
+#ANOVA
+expect_equal(usktest(y~Tratamento,dados,ANOVA = T)[[3]][["Pr(>F)"]][1],9.573813e-11,tolerance=0.01)
+#Variaveis com nome diferente
+expect_equal(as.character(usktest(y~Tratamento,dados,ANOVA = T)[[1]]),"y")
+expect_equal(as.character(usktest(y~Tratamento,dados,ANOVA = T)[[2]]),"Tratamento")
+expect_equal(as.character(usktest(y~Tratamento,dados,ANOVA = F)[[1]]),"y")
+expect_equal(as.character(usktest(y~Tratamento,dados,ANOVA = F)[[2]]),"Tratamento")
+expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = T)[[1]]),"y_nome_diferente")
+expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = T)[[2]]),"Tratamento_nome_diferente")
+expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = F)[[1]]),"y_nome_diferente")
+expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = F)[[2]]),"Tratamento_nome_diferente")
+

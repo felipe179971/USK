@@ -42,6 +42,6 @@ y<-2+taus+erro
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dados<-data.frame(y,Tratamento)
 
-usktest(y~Tratamento,dados,ANOVA = F)
+#usktest(y~Tratamento,dados,ANOVA = F)
 ```
 
