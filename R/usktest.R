@@ -4,17 +4,17 @@
 #' cluster analyses (1974) for unbalanced designs proposed at 2017 (CONRADO, Thiago
 #' Vincenzi et al). To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
 #'
+#' @param formula at the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be \code{observation ~ treatment}
 #' @param dataset an indication to the database being used.
-#' @param formula a quantitative variable containing the metric results of the experiment.
 #' @param alpha type I error the researcher can accept (the default is 0.05).
-#' @param graphic if TRUE (the default), export a chart ggplotly.
-#' @param ANOVA if TRUE (the default), export an ANOVA table.
+#' @param graphic if TRUE (the default), print a chart ggplotly.
+#' @param ANOVA if TRUE (the default), print an ANOVA table.
 #'
 #' @import purrr dplyr
 #' @importFrom ggplot2 ggplot aes geom_point scale_y_continuous geom_errorbar theme_bw labs
 #' @importFrom pkgcond suppress_messages
 #' @importFrom plotly ggplotly layout
-#' @importFrom stats aov qchisq
+#' @importFrom stats aov qchisq as.formula
 #'
 #' @author Felipe Ferreira \email{felipe179971@hotmail.com}
 #'
@@ -31,11 +31,11 @@
 #'
 #' @return This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
 #' \itemize{
-#'  \item "var2": Treatments.
-#'  \item group: Which group the treatment was classified.
-#'  \item mean: Average value of "var1" for each treatment.
-#'  \item min: Lowest value of "var1" for each treatment.
-#'  \item max Higher value of "var1" for each treatment.
+#'  \item '\code{treatments}': treatments.
+#'  \item \code{group}: which group the treatment was classified.
+#'  \item \code{mean}: average value of 'observation' for each treatment.
+#'  \item \code{min}: lowest value of 'observation' for each treatment.
+#'  \item \code{max}: higher value of 'observation' for each treatment.
 #' }
 #'
 #' @encoding UTF-8

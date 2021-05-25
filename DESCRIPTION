@@ -1,5 +1,5 @@
 Package: USK
-Title: Unbalanced Scott-Knott
+Title: Unbalanced Scott-Knott (USK)
 Version: 1.0.0.0
 Authors@R: 
     person("Felipe","Ferreira",email="felipe179971@hotmail.com",role = c("aut", "cre"))
@@ -20,5 +20,8 @@ Imports:
 Depends: 
     R (>= 2.10)
 Suggests: 
+    rmarkdown,
+    knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr

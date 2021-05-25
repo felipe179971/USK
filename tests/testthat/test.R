@@ -48,7 +48,7 @@ expect_error(usktest(y~Tratamento_character,dados),"The variable 'Tratamento_cha
 expect_error(usktest(y_1var_NA~Tratamento,dados),"All 'Tratamento' must have more than 1 observations")
 expect_error(usktest(y~Tratamento_unico,dados),"The variable 'Tratamento_unico' must have more than 1 type of treatment")
 expect_error(usktest(y~Tratamento+Tratamento_unico,dados),"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
-expect_equal(capture.output(usktest(y~Tratamento,dados,ANOVA=F,graphic=F))[1],"\033[38;5;246m# A tibble: 6 x 5\033[39m")
+#expect_equal(as.character(capture.output(usktest(y~Tratamento,dados,ANOVA=F,graphic=F))[1]),"\033[38;5;246m# A tibble: 6 x 5\033[39m")
 expect_equal(capture.output(usktest(y~Tratamento,dados,graphic=F))[1],"[1] \"##########################ANOVA###########################\"")
 expect_equal(capture.output(usktest(y~Tratamento,dados))[3],"Tratamento   5 710.660096 142.1320191 230.4221 9.573813e-11")
 expect_equal(grafico_005,"Mean: -1.46<br />Treatment: trat 3<br />Group: c")
@@ -64,12 +64,3 @@ expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$Group,re
 expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$Mean,resultado_099$Mean,tolerance=0.05)
 expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$min,resultado_099$min,tolerance=0.05)
 expect_equal(usktest(y~Tratamento,dados,ANOVA = F,graphic=F,alpha=0.99)$max,resultado_099$max,tolerance=0.05)
-
-
-a<-usktest(y~Tratamento,dados,ANOVA=F,graphic=T)
-colnames(a)[1]<-"Treatment"
-a$Ordem<-c(1:6)
-
-aa<-USK:::Graphic(a)$x$data[[1]]$text
-
-

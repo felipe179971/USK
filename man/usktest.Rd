@@ -8,24 +8,24 @@
 usktest(formula, dataset, alpha = 0.05, graphic = TRUE, ANOVA = TRUE)
 }
 \arguments{
-\item{formula}{a quantitative variable containing the metric results of the experiment.}
+\item{formula}{at the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be \code{observation ~ treatment}}
 
 \item{dataset}{an indication to the database being used.}
 
 \item{alpha}{type I error the researcher can accept (the default is 0.05).}
 
-\item{graphic}{if TRUE (the default), export a chart ggplotly.}
+\item{graphic}{if TRUE (the default), print a chart ggplotly.}
 
-\item{ANOVA}{if TRUE (the default), export an ANOVA table.}
+\item{ANOVA}{if TRUE (the default), print an ANOVA table.}
 }
 \value{
 This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
 \itemize{
-\item "var2": Treatments.
-\item group: Which group the treatment was classified.
-\item mean: Average value of "var1" for each treatment.
-\item min: Lowest value of "var1" for each treatment.
-\item max Higher value of "var1" for each treatment.
+\item '\code{treatments}': treatments.
+\item \code{group}: which group the treatment was classified.
+\item \code{mean}: average value of 'observation' for each treatment.
+\item \code{min}: lowest value of 'observation' for each treatment.
+\item \code{max}: higher value of 'observation' for each treatment.
 }
 }
 \description{

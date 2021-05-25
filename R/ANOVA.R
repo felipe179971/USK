@@ -4,7 +4,8 @@
 #' @description ...
 #'
 #' @param dataset ...
-#' @param formula
+#' @param formula ...
+#'
 #'
 #' @author Felipe Ferreira
 

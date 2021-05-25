@@ -7,7 +7,7 @@
 ANOVA(formula, dataset)
 }
 \arguments{
-\item{formula}{}
+\item{formula}{...}
 
 \item{dataset}{...}
 }
