@@ -75,4 +75,12 @@ expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dad
 expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = T)[[2]]),"Tratamento_nome_diferente")
 expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = F)[[1]]),"y_nome_diferente")
 expect_equal(as.character(usktest(y_nome_diferente~Tratamento_nome_diferente,dados,ANOVA = F)[[2]]),"Tratamento_nome_diferente")
-
+#Muitos tratamentos
+set.seed(17)
+taus=c(seq(from=2, to=400, by=4))
+Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
+erro<-rnorm(3*length(taus),0,1)
+y<-2+taus+erro
+y[round(runif(1,min=1,max=length(y)),0)]<-NA
+dados<-data.frame(y,Tratamento)
+expect_equal(length(usktest(y~Tratamento,dados,ANOVA=F)[["Group"]]),100,tolerance=0)
