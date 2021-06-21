@@ -43,10 +43,14 @@ dados$y_nome_diferente<-as.numeric(dados$y)
 ####TESTE##########
 #Erros
 expect_error(usktest(y_factor~Tratamento,dados),"The variable 'y_factor' must be numeric")
-expect_error(usktest(y~Tratamento_character,dados),"The variable 'Tratamento_character' must be factor")
+expect_error(usktest(y~Tratamento_character,dados),"The variable 'Tratamento_character' must be a factor")
 expect_error(usktest(y_1var_NA~Tratamento,dados),"All 'Tratamento' must have more than 1 observations")
 expect_error(usktest(y~Tratamento_unico,dados),"The variable 'Tratamento_unico' must have more than 1 type of treatment")
 expect_error(usktest(y~Tratamento+Tratamento_unico,dados),"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
+expect_error(usktest(y_factor~Tratamento+Tratamento_unico,dados),"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
+expect_error(usktest(y_factor~Tratamento_unico,dados),"The variable 'y_factor' must be numeric\nThe variable 'Tratamento_unico' must have more than 1 type of treatment")
+expect_error(usktest(y_factor~Tratamento_character,dados),"The variable 'Tratamento_character' must be a factor\nThe variable 'y_factor' must be numeric")
+
 #Gráfico
 expect_equal(as.character(plot_usk(teste_005)$data$Group[6]),"d")
 expect_equal(as.character(plot_usk(teste_099)$data$Group[6]),"f")
@@ -84,3 +88,7 @@ y<-2+taus+erro
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dados<-data.frame(y,Tratamento)
 expect_equal(length(usktest(y~Tratamento,dados,ANOVA=F)[["Group"]]),100,tolerance=0)
+
+
+a<-usktest(y~Tratamento,dados,ANOVA=F)
+b<-usktest(y~Tratamento,dados,ANOVA=T)

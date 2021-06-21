@@ -50,15 +50,24 @@ usktest <-
     var1<-as.character(formula[[2]])
     var2<-as.character(formula[[3]])
     if(length(as.character(formula[[3]]))>1){
-      stop("At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'")
-    }else if(is.factor(dataset[[var2]])==FALSE){
-      stop(paste0("The variable '",as.character(formula[[3]]),"' must be factor"))
-    }else if(is.numeric(dataset[[var1]])==FALSE){
-      stop(paste0("The variable '",as.character(formula[[2]]),"' must be numeric"))
-    }else if(length(unique(dataset[[var2]]))<2){
-      stop(paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment"))
-    }else if(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0){
-      stop(paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
+      verifications<-list(c(length(as.character(formula[[3]]))>1,"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'"))
+    }else{
+      verifications<-list(c(is.factor(dataset[[var2]])==FALSE,paste0("The variable '",as.character(formula[[3]]),"' must be a factor")),
+                          c(is.numeric(dataset[[var1]])==FALSE,paste0("The variable '",as.character(formula[[2]]),"' must be numeric")),
+                          c(length(unique(dataset[[var2]]))<2,paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment")),
+                          c(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0,paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
+      )
+    }
+
+    message<-as.character("")
+    count_errors<-0
+    for(i in 1:length(verifications)){
+      message<-ifelse(verifications[[i]][[1]]==TRUE,paste(message,as.character(verifications[[i]][[2]]),sep="\n"),message)
+      count_errors<-ifelse(verifications[[i]][[1]]==TRUE,count_errors+1,count_errors)
+    }
+
+    if(count_errors>0){
+      stop(paste(message))
     }else{
       Result<-RUNscott(dataset,var1,var2,alpha,ANOVA(formula,dataset)[["df.residual"]],summary(ANOVA(formula,dataset))[[1]][["Mean Sq"]][[2]])
       colnames(Result)[1]<-var2
@@ -75,3 +84,4 @@ usktest <-
       invisible(Resultado)
     }
   }
+
