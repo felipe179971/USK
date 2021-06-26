@@ -28,7 +28,7 @@
 #' dados<-data.frame(y,Tratamento)
 #'
 #' test<-usktest(y~Tratamento,dados)
-#' #Plotly
+#' #Plotly (TESTANDOOOOOOOOOO)
 #' plotly_usk(test)
 #' #GGplot2
 #' plot_usk(test)
