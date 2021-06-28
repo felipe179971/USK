@@ -15,13 +15,11 @@ usktest(formula, dataset, alpha = 0.05, ANOVA = TRUE)
 \item{alpha}{type I error the researcher can accept (the default is 0.05).}
 
 \item{ANOVA}{if TRUE (the default), print an ANOVA table.}
-
-\item{graphic}{if TRUE (the default), print a chart ggplotly.}
 }
 \value{
-This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
+If \code{group=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
 \itemize{
-\item '\code{treatments}': treatments.
+\item '\code{treatments}': the name of the 'treatments' parameter.
 \item \code{group}: which group the treatment was classified.
 \item \code{mean}: average value of 'observation' for each treatment.
 \item \code{min}: lowest value of 'observation' for each treatment.
@@ -30,8 +28,8 @@ This function returns the ANOVA table, a graph and a \code{data.frame} including
 }
 \description{
 \code{\link{usktest}} is a function used to do the Scott-Knott
-cluster analyses (1974) for unbalanced designs proposed at 2017 (CONRADO, Thiago
-Vincenzi et al). To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
+cluster analysis (1974) for unbalanced designs proposed at 2017 (CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R.).
+To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
 }
 \examples{
 
@@ -43,11 +41,18 @@ y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dados<-data.frame(y,Tratamento)
 
 test<-usktest(y~Tratamento,dados)
-#Plotly
+#plotly
 plotly_usk(test)
-#GGplot2
+#ggplot2
 plot_usk(test)
-#plotly_usk(test)
+
+
+}
+\references{
+CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R. (2017) \emph{Adjusting the Scott-Knott cluster analyses for unbalanced designs}.
+}
+\seealso{
+For graphics: \code{plot_usk} or \code{plotly_usk}. See also the packages \href{https://cran.r-project.org/web/packages/ScottKnott/index.html}{ScottKnott}, \href{https://cran.r-project.org/web/packages/ScottKnottESD/index.html}{ScottKnottESD} and \href{https://cran.r-project.org/web/packages/multcomp/index.html}{multcomp}.
 }
 \author{
 Felipe Ferreira \email{felipe179971@hotmail.com}

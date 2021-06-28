@@ -1,22 +1,31 @@
-#' Unbalanced Scott-Knott (USK)
+#' @title Unbalanced Scott-Knott (USK)
+#'
+#' @name usktest
 #'
 #' @description \code{\link{usktest}} is a function used to do the Scott-Knott
-#' cluster analyses (1974) for unbalanced designs proposed at 2017 (CONRADO, Thiago
-#' Vincenzi et al). To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
+#' cluster analysis (1974) for unbalanced designs proposed at 2017 (CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R.).
+#'  To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
 #'
 #' @param formula at the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be \code{observation ~ treatment}
 #' @param dataset an indication to the database being used.
 #' @param alpha type I error the researcher can accept (the default is 0.05).
-#' @param graphic if TRUE (the default), print a chart ggplotly.
 #' @param ANOVA if TRUE (the default), print an ANOVA table.
 #'
-#' @import purrr dplyr
-#' @importFrom ggplot2 ggplot aes geom_point scale_y_continuous geom_errorbar theme_bw labs
-#' @importFrom pkgcond suppress_messages
-#' @importFrom plotly ggplotly layout
-#' @importFrom stats aov qchisq as.formula
+#' @return If \code{group=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
+#' \itemize{
+#'  \item '\code{treatments}': the name of the 'treatments' parameter.
+#'  \item \code{group}: which group the treatment was classified.
+#'  \item \code{mean}: average value of 'observation' for each treatment.
+#'  \item \code{min}: lowest value of 'observation' for each treatment.
+#'  \item \code{max}: higher value of 'observation' for each treatment.
+#' }
+#'
 #'
 #' @author Felipe Ferreira \email{felipe179971@hotmail.com}
+#'
+#' @references CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R. (2017) \emph{Adjusting the Scott-Knott cluster analyses for unbalanced designs}.
+#'
+#' @seealso For graphics: \code{plot_usk} or \code{plotly_usk}. See also the packages \href{https://cran.r-project.org/web/packages/ScottKnott/index.html}{ScottKnott}, \href{https://cran.r-project.org/web/packages/ScottKnottESD/index.html}{ScottKnottESD} and \href{https://cran.r-project.org/web/packages/multcomp/index.html}{multcomp}.
 #'
 #' @examples
 #'
@@ -28,19 +37,19 @@
 #' dados<-data.frame(y,Tratamento)
 #'
 #' test<-usktest(y~Tratamento,dados)
-#' #Plotly (TESTANDOOOOOOOOOO)
+#' #plotly
 #' plotly_usk(test)
-#' #GGplot2
+#' #ggplot2
 #' plot_usk(test)
-#' #plotly_usk(test)
-#' @return This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
-#' \itemize{
-#'  \item '\code{treatments}': treatments.
-#'  \item \code{group}: which group the treatment was classified.
-#'  \item \code{mean}: average value of 'observation' for each treatment.
-#'  \item \code{min}: lowest value of 'observation' for each treatment.
-#'  \item \code{max}: higher value of 'observation' for each treatment.
-#' }
+#'
+#'
+#' @import purrr dplyr
+#' @importFrom ggplot2 ggplot aes geom_point scale_y_continuous geom_errorbar theme_bw labs
+#' @importFrom pkgcond suppress_messages
+#' @importFrom plotly ggplotly layout
+#' @importFrom stats aov qchisq as.formula
+#'
+#'
 #'
 #' @encoding UTF-8
 #' @export

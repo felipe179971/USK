@@ -1,18 +1,29 @@
-#' U
+#' @title Unbalanced Scott-Knott (USK) on a Plotly Graphic
 #'
-#' @description \code{\link{usktest}} is a function used to do the Scott-Knott
-#' cluster analyses (1974) for unbalanced designs proposed at 2017 (CONRADO, Thiago
-#' Vincenzi et al). To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
+#' @name plotly_usk
 #'
-#' @param test ...
+#' @description \code{\link{plotly_usk}} is used to show the \code{\link{usktest}} result,
+#' that do the Scott-Knott cluster analyses (1974) for unbalanced designs proposed at 2017
+#'  (CONRADO, Thiago Vincenzi et al), in a plotly graphic.
+#'  To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
 #'
-#' @import purrr dplyr
-#' @importFrom ggplot2 ggplot aes geom_point scale_y_continuous geom_errorbar theme_bw labs
-#' @importFrom pkgcond suppress_messages
-#' @importFrom plotly ggplotly layout
-#' @importFrom stats aov qchisq as.formula
+#' @param test  is the \code{\link{plotly_usk}} function.
+#'
+#' @return This function returns a plotly graph with:
+#' \itemize{
+#'  \item \code{title}: "Scott-Knott";
+#'  \item \code{x}:  treatments;
+#'  \item \code{y}:   average value of 'observation' for each treatment;
+#'  \item \code{geom_errorbar}: lowest to higher values of 'observation' for each treatment;
+#'  \item \code{color}: which group the treatment was classified.
+#' }
+#'
 #'
 #' @author Felipe Ferreira \email{felipe179971@hotmail.com}
+#'
+#' @references CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R. (2017) \emph{Adjusting the Scott-Knott cluster analysis for unbalanced designs}.
+#'
+#' @seealso For another graphic: \code{plot_usk}. See also the packages \href{https://cran.r-project.org/web/packages/ScottKnott/index.html}{ScottKnott}, \href{https://cran.r-project.org/web/packages/ScottKnottESD/index.html}{ScottKnottESD} and \href{https://cran.r-project.org/web/packages/multcomp/index.html}{multcomp}.
 #'
 #' @examples
 #'
@@ -24,15 +35,16 @@
 #' dados<-data.frame(y,Tratamento)
 #'
 #' test<-usktest(y~Tratamento,dados)
+#' #plotly
 #' plotly_usk(test)
-#' @return This function returns the ANOVA table, a graph and a \code{data.frame} including columns:
-#' \itemize{
-#'  \item '\code{treatments}': treatments.
-#'  \item \code{group}: which group the treatment was classified.
-#'  \item \code{mean}: average value of 'observation' for each treatment.
-#'  \item \code{min}: lowest value of 'observation' for each treatment.
-#'  \item \code{max}: higher value of 'observation' for each treatment.
-#' }
+#' #ggplot2
+#' plot_usk(test)
+#'
+#' @import purrr dplyr
+#' @importFrom ggplot2 ggplot aes geom_point scale_y_continuous geom_errorbar theme_bw labs
+#' @importFrom pkgcond suppress_messages
+#' @importFrom plotly ggplotly layout
+#' @importFrom stats aov qchisq as.formula
 #'
 #' @encoding UTF-8
 #' @export

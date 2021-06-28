@@ -18,7 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-(Descrição)
+*usktest* is a function used to do the Scott-Knott
+ cluster analysis (1974) for unbalanced designs proposed at 2017 (CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R.).
+ To learn more, see the article: <http://ref.scielo.org/ws792m>.
 
 ## Installation
 
@@ -32,7 +34,7 @@ devtools::install_github("felipe179971/USK",force = TRUE)
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+%```{r example}
 library(USK)
 ## basic example code
 taus=c(4,4,-4,-4,9,-9)
