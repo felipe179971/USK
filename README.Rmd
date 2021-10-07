@@ -34,7 +34,7 @@ devtools::install_github("felipe179971/USK",force = TRUE)
 
 This is a basic example which shows you how to solve a common problem:
 
-%```{r example}
+```{r example}
 library(USK)
 ## basic example code
 taus=c(4,4,-4,-4,9,-9)
@@ -44,6 +44,6 @@ y<-2+taus+erro
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dados<-data.frame(y,Tratamento)
 
-#usktest(y~Tratamento,dados,ANOVA = F)
+plot_usk(usktest(y~Tratamento,dados,ANOVA = T))
 ```
 
