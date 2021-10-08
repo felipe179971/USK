@@ -117,17 +117,17 @@ for (i in 1:length(percentage)){
     #Erro Tipo I
     alpha=0.05,
     #Definindo os valores dos taus e quantos tratamentos terei
-    taus=c(40,30,20,10,-10,-20,-30,-40),
+    taus=c(10,10),
     #Média
     mu=20,
     #Sigma do modelo erro~N(0,sigma)
     sigma=1,
     #Número de observações (ou blocos) em cada tratamentos
-    observations=10,
+    observations=4,
     #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
     missings=percentage[i],
     #Quantidades de grupos que o teste deveria retornar
-    groups=8
+    groups=1
   )
   names(result)[i]<-paste0("Missings= ",percentage[i],"%")
   #Avaliando o progresso
@@ -135,41 +135,38 @@ for (i in 1:length(percentage)){
 }
 
 #Olhando o resultado
-V19<-result
+H_005_10_10_20_1_4<-result
 
 #Pegando só o que acertou
-quero<-V19
+quero<-H_005_10_10_20_1_4
 resultado_original<-c()
 for (i in 1:length(quero)) {
-  resultado_original[i]<-quero[[i]][[1]][["groups=8"]]
+  resultado_original[i]<-quero[[i]][[1]][["groups=1"]]
 }
 
 resultado_missing<-c()
 for (i in 1:length(quero)) {
-  resultado_missing[i]<-quero[[i]][[2]][["groups=8"]]
+  resultado_missing[i]<-quero[[i]][[2]][["groups=1"]]
 }
 
 resultado_imputed<-c()
 for (i in 1:length(quero)) {
-  resultado_imputed[i]<-quero[[i]][[3]][["groups=8"]]
+  resultado_imputed[i]<-quero[[i]][[3]][["groups=1"]]
 }
 
 data.frame(percentage=percentage/100,original=resultado_original,
            missing=resultado_missing,
            imputed=resultado_imputed)
-############################
-(D<-dataset(taus=c(10,-10),mu=10,sigma=1,observations=10,missings=30,groups=2,seed=1,iterations=1))
-simulacao(iterations=1,alpha=0.05,taus=c(10,-10),mu=10,sigma=1,observations=4,missings=30,groups=2)
-8*.3
+###################Teste separado dos parâmetros
+x<-dataset(taus=c(1,2,3,-1,-2,-3),
+           mu=20,
+           sigma=50,
+           observations=10,
+           missings=30,
+           groups=4,
+           seed=20)
+#data.frame(Treatment=x$Treatment,Original=x$Original,Missing=x$Missing,Imputed=x$Imputed)
 
-A<-D
-usktest(Missing~Treatment,A,alpha=0.05)
-plotly_usk(usktest(Missing~Treatment,A,alpha=0.05,ANOVA=F))
-plotly_usk(usktest(Imputed~Treatment,A,alpha=0.05,ANOVA=F))
-plotly_usk(usktest(Original~Treatment,A,alpha=0.05,ANOVA=F))
+plotly_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
+plot_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
 
-set.seed(1)
-rnorm(2)
-
-set.seed(2)
-sample(25,1)
