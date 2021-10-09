@@ -181,39 +181,6 @@ for (j in 1:length(quero)) {
 a
 
 #######################################################
-
-resultado_original
-quero[[1]][[1]][[1]][["groups=2"]]
-quero[[1]][[1]][[1]][["groups=2"]]
-#Nomeando os bancos de dados
-length(quero[[1]])
-#Colocando os valores por linha
-
-
-resultado_original<-c()
-for (j in 1:length(quero)){
-
-for (i in 1:length(quero[[1]])) {
-  resultado_original[i]<-quero[[j]][[i]][[1]][["groups=2"]]
-}
-print(resultado_original)
-}
-
-names(quero[[1]])
-quero[[1]][[1]]
-resultado_missing<-c()
-for (i in 1:length(quero)) {
-  resultado_missing[i]<-quero[[i]][[2]][["groups=1"]]
-}
-
-resultado_imputed<-c()
-for (i in 1:length(quero)) {
-  resultado_imputed[i]<-quero[[i]][[3]][["groups=1"]]
-}
-
-data.frame(percentage=percentage/100,original=resultado_original,
-           missing=resultado_missing,
-           imputed=resultado_imputed)
 ###Banco de Dados e Porcentagem de Dados Faltantes:#####
 porcentagem<-c(5,30)
 for(i in 1:length(porcentagem)){
