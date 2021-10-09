@@ -209,3 +209,6 @@ plot_usk(usktest(Missing~Treatment,x,0,ANOVA=F))
 
 plotly_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
 plot_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
+###ANOVA e saída no Console:#######
+Com_Anova<-usktest(formula=Missing~Treatment,dataset=x,alpha=.05,ANOVA=T)
+Sem_Anova<-usktest(formula=Missing~Treatment,dataset=x,alpha=.05,ANOVA=F)
