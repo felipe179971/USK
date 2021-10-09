@@ -2,6 +2,7 @@ library(USK)
 library(dplyr)
 library(plotly)
 library(mice)
+library(stringr)
 taus=c(4,4,-4,-4,9,-9)
 Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 erro<-rnorm(3*length(taus),0,1)
@@ -103,47 +104,103 @@ simulacao<-function(iterations,alpha,taus,mu,sigma,observations,missings,groups)
 
 }
 ###############
-#Definindo as porcentagens
-percentage<-c(0,5,10,15,20,25,30)
-#percentage<-c(0)
 #Criando lista para armazenar os resultados
-result<-as.list(1:length(percentage))
+percentage<-c(20,25,30)
+sigmas<-c(5,10)
+result<-as.list(1:length(sigmas))
+result2<-as.list(1:length(percentage))
 #Executando
-for (i in 1:length(percentage)){
+for (j in 1:length(sigmas)){
 
-  result[[i]]<-simulacao(
-    #Quantidade de casos a serem avaliados (iterações)
-    iterations=1000,
-    #Erro Tipo I
-    alpha=0.05,
-    #Definindo os valores dos taus e quantos tratamentos terei
-    taus=c(10,10),
-    #Média
-    mu=20,
-    #Sigma do modelo erro~N(0,sigma)
-    sigma=1,
-    #Número de observações (ou blocos) em cada tratamentos
-    observations=4,
-    #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
-    missings=percentage[i],
-    #Quantidades de grupos que o teste deveria retornar
-    groups=1
-  )
-  names(result)[i]<-paste0("Missings= ",percentage[i],"%")
-  #Avaliando o progresso
-  print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=0.05,
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(10,-10),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=sigmas[j],
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=4,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=2
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Sigma= ",sigmas[j])
 }
+result
 
 #Olhando o resultado
-H_005_10_10_20_1_4<-result
+quero<-result
 
 #Pegando só o que acertou
-quero<-H_005_10_10_20_1_4
-resultado_original<-c()
-for (i in 1:length(quero)) {
-  resultado_original[i]<-quero[[i]][[1]][["groups=1"]]
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Sigma/Missing")
+a[2,1]<-c("-")
+#Nomeando os Sigmas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
 }
 
+a
+  #Original
+for (k in 1:3) {
+  #porcen
+for (i in 1:length(quero[[1]])) {
+  #sigma
+for (j in 1:length(quero)) {
+  #resultado_original[j]<-
+  a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=2"]]
+}
+}
+}
+a
+
+#######################################################
+
+resultado_original
+quero[[1]][[1]][[1]][["groups=2"]]
+quero[[1]][[1]][[1]][["groups=2"]]
+#Nomeando os bancos de dados
+length(quero[[1]])
+#Colocando os valores por linha
+
+
+resultado_original<-c()
+for (j in 1:length(quero)){
+
+for (i in 1:length(quero[[1]])) {
+  resultado_original[i]<-quero[[j]][[i]][[1]][["groups=2"]]
+}
+print(resultado_original)
+}
+
+names(quero[[1]])
+quero[[1]][[1]]
 resultado_missing<-c()
 for (i in 1:length(quero)) {
   resultado_missing[i]<-quero[[i]][[2]][["groups=1"]]
@@ -157,16 +214,31 @@ for (i in 1:length(quero)) {
 data.frame(percentage=percentage/100,original=resultado_original,
            missing=resultado_missing,
            imputed=resultado_imputed)
-###################Teste separado dos parâmetros
-x<-dataset(taus=c(1,2,3,-1,-2,-3),
-           mu=20,
-           sigma=50,
-           observations=10,
-           missings=30,
-           groups=4,
+###Banco de Dados e Porcentagem de Dados Faltantes:#####
+porcentagem<-c(5,30)
+for(i in 1:length(porcentagem)){
+  x<-dataset(taus=c(-10,10),
+             mu=20,
+             sigma=5,
+             observations=4,
+             missings=porcentagem[i],
+             groups=2,
+             seed=20)
+  print(data.frame(Treatment=x$Treatment,Original=x$Original,Missing=x$Missing,Imputed=x$Imputed))
+}
+###Gráficos e Alpha:#######
+x<-dataset(taus=c(1,.9,-1,-.9),
+           mu=1,
+           sigma=.5,
+           observations=4,
+           missings=5,
+           groups=2,
            seed=20)
-#data.frame(Treatment=x$Treatment,Original=x$Original,Missing=x$Missing,Imputed=x$Imputed)
-
 plotly_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
 plot_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
 
+plotly_usk(usktest(Missing~Treatment,x,0,ANOVA=F))
+plot_usk(usktest(Missing~Treatment,x,0,ANOVA=F))
+
+plotly_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
+plot_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
