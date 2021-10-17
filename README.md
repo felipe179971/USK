@@ -36,22 +36,22 @@ dados<-data.frame(y,Tratamento)
 plot_usk(usktest(y~Tratamento,dados,ANOVA = T))
 #> [1] "##########################ANOVA###########################"
 #>             Df Sum Sq Mean Sq F value   Pr(>F)    
-#> Tratamento   5  630.6   126.1   115.1 4.08e-09 ***
-#> Residuals   11   12.0     1.1                     
+#> Tratamento   5  672.2  134.44   209.5 1.61e-10 ***
+#> Residuals   11    7.1    0.64                     
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 1 observation deleted due to missingness
 #> [1] "#######################Scott-Knott########################"
 #> # A tibble: 6 x 5
 #> # Groups:   Tratamento [6]
-#>   Tratamento Group  Mean   min   max
-#>   <fct>      <fct> <dbl> <dbl> <dbl>
-#> 1 trat 5     a     11.1  10.2  12.0 
-#> 2 trat 1     b      5.43  3.46  7.43
-#> 3 trat 2     b      5.04  3.96  5.68
-#> 4 trat 3     c     -2.83 -3.15 -2.56
-#> 5 trat 4     c     -3.01 -3.49 -2.53
-#> 6 trat 6     d     -6.13 -6.37 -5.85
+#>   Tratamento Group  Mean   min    max
+#>   <fct>      <fct> <dbl> <dbl>  <dbl>
+#> 1 trat 5     a     11.2  10.7  11.7  
+#> 2 trat 1     b      7.44  6.58  8.21 
+#> 3 trat 2     b      6.3   6.07  6.54 
+#> 4 trat 4     c     -1.68 -2.26 -0.979
+#> 5 trat 3     c     -2.37 -3.00 -1.19 
+#> 6 trat 6     d     -6.12 -7.32 -5.35
 ```
 
 <img src="man/figures/README-example-1.png" width="90%" />
