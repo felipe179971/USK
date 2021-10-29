@@ -98,51 +98,54 @@ simulacao<-function(iterations,alpha,taus,mu,sigma,observations,missings,groups)
 ####################################################################################
 
 ##Executando as funções#############################################################
-#a)Para o Poder do Teste (% e sigma) ###########
+##Simulação I#####
+#Poucas Observações e Poucos Tratamentos para Verificaro Erro Tipo I
+#[Erro Tipo I (% e alpha) 20 observações (4 trat e 5 obs)]
+
 #Criando lista para armazenar os resultados
 percentage<-c(0,5,10,15,20)
-sigmas<-c(1,2,3,4,5)
-result<-as.list(1:length(sigmas))
+alphas<-c(0.01,0.05,0.10,0.15,0.20)
+result<-as.list(1:length(alphas))
 result2<-as.list(1:length(percentage))
 #Executando
-for (j in 1:length(sigmas)){
+for (j in 1:length(alphas)){
 
   for (i in 1:length(percentage)){
     result2[[i]]<-simulacao(
       #Quantidade de casos a serem avaliados (iterações)
       iterations=1000,
       #Erro Tipo I
-      alpha=0.05,
+      alpha=alphas[j],
       #Definindo os valores dos taus e quantos tratamentos terei
-      taus=c(25,20,15,10,5,-5,-10,-15,-20,-25),
+      taus=c(0,0,0,0),
       #Média
       mu=20,
       #Sigma do modelo erro~N(0,sigma)
-      sigma=sigmas[j],
+      sigma=1,
       #Número de observações (ou blocos) em cada tratamentos
-      observations=10,
+      observations=5,
       #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
       missings=percentage[i],
       #Quantidades de grupos que o teste deveria retornar
-      groups=10
+      groups=1
     )
-    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Alpha= ",alphas[j])
     #Avaliando o progresso
     print(paste0(i," (",round(i/length(percentage)*100),"%)"))
   }
   result[[j]]<-result2
-  names(result)[j]<-paste0("Sigma= ",sigmas[j])
+  names(result)[j]<-paste0("Alpha= ",alphas[j])
 }
 result
 
 #Olhando o resultado
 quero<-result
-
 ##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+#Pegando só o que acertou
 a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
-a[1,1]<-c("Sigma/Missing")
+a[1,1]<-c("Alpha/Missing")
 a[2,1]<-c("-")
-#Nomeando os Sigmas
+#Nomeando os alphas
 for(i in 1:length(quero)){
   a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
 }
@@ -166,17 +169,19 @@ for(i in 1:length(pega)){
 for (k in 1:3) {
   #porcen
   for (i in 1:length(quero[[1]])) {
-    #sigma
+    #alpha
     for (j in 1:length(quero)) {
       #coletando
-      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=10"]]
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=1"]]
     }
   }
 }
 #Imprimindo
 (b<-data.frame(a))
 
-##b)Erro Tipo I (% e alpha)##########
+##Simulação II#####
+#Muitas Observações e Poucos Tratamentos para Verificar o Erro Tipo I
+#[Erro Tipo I (% e alpha) 100 observações (4 trat e 25 obs)]
 #Criando lista para armazenar os resultados
 percentage<-c(0,5,10,15,20)
 alphas<-c(0.01,0.05,0.10,0.15,0.20)
@@ -254,6 +259,505 @@ for (k in 1:3) {
 #Imprimindo
 (b<-data.frame(a))
 
+##Simulação III#####
+#Poucas Observações e Muitos Tratamentos para Veri-ficar o Erro Tipo I
+#[Erro Tipo I (% e alpha) 100 obserações (10 trat e 10 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+alphas<-c(0.01,0.05,0.10,0.15,0.20)
+result<-as.list(1:length(alphas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(alphas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=alphas[j],
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(rep(0,10)),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=1,
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=10,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=1
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Alpha= ",alphas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Alpha= ",alphas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+#Pegando só o que acertou
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Alpha/Missing")
+a[2,1]<-c("-")
+#Nomeando os alphas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #alpha
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=1"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
+
+
+##Simulação IV#####
+#Muitas Observações e Muitos Tratamentos para Veri-ficar o Erro Tipo I
+#[Erro Tipo I (% e alpha) 500 obserações (10 trat e 50 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+alphas<-c(0.01,0.05,0.10,0.15,0.20)
+result<-as.list(1:length(alphas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(alphas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=alphas[j],
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(rep(0,10)),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=1,
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=50,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=1
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Alpha= ",alphas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Alpha= ",alphas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+#Pegando só o que acertou
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Alpha/Missing")
+a[2,1]<-c("-")
+#Nomeando os alphas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #alpha
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=1"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
+
+
+
+
+
+##Simulação V#####
+#Poucas Observações e Poucos Tratamentos para Verificar o Poder do Teste
+#[Para o Poder do Teste (% e sigma) 20 observações (4 trat e 5 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+sigmas<-c(1,2,3,4,5)
+result<-as.list(1:length(sigmas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(sigmas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=0.05,
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(10,5,-5,-10),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=sigmas[j],
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=5,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=4
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Sigma= ",sigmas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Sigma/Missing")
+a[2,1]<-c("-")
+#Nomeando os Sigmas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #sigma
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=4"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
+
+
+
+
+
+##Simulação VI#####
+#Muitas Observações e Poucos Tratamentos para Verificar o Poder do Teste
+#[Para o Poder do Teste (% e sigma) 100 observações (4 trat e 25 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+sigmas<-c(1,2,3,4,5)
+result<-as.list(1:length(sigmas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(sigmas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=0.05,
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(10,5,-5,-10),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=sigmas[j],
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=25,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=4
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Sigma= ",sigmas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Sigma/Missing")
+a[2,1]<-c("-")
+#Nomeando os Sigmas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #sigma
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=4"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
+
+
+
+
+
+
+##Simulação VII#####
+#Poucas Observações e Muitos Tratamentos para Verificar o Poder do Teste
+#[Para o Poder do Teste (% e sigma) 100 observações (10 trat e 10 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+sigmas<-c(1,2,3,4,5)
+result<-as.list(1:length(sigmas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(sigmas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=0.05,
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(25,20,15,10,5,-5,-10,-15,-20,-25),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=sigmas[j],
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=10,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=10
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Sigma= ",sigmas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Sigma/Missing")
+a[2,1]<-c("-")
+#Nomeando os Sigmas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #sigma
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=10"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
+
+##Simulação VIII#####
+#Muitas Observações e Muitos Tratamentos para Verificar o Poder do Teste
+#[Para o Poder do Teste (% e sigma) 500 observações (10 trat e 50 obs)]
+#Criando lista para armazenar os resultados
+percentage<-c(0,5,10,15,20)
+sigmas<-c(1,2,3,4,5)
+result<-as.list(1:length(sigmas))
+result2<-as.list(1:length(percentage))
+#Executando
+for (j in 1:length(sigmas)){
+
+  for (i in 1:length(percentage)){
+    result2[[i]]<-simulacao(
+      #Quantidade de casos a serem avaliados (iterações)
+      iterations=1000,
+      #Erro Tipo I
+      alpha=0.05,
+      #Definindo os valores dos taus e quantos tratamentos terei
+      taus=c(25,20,15,10,5,-5,-10,-15,-20,-25),
+      #Média
+      mu=20,
+      #Sigma do modelo erro~N(0,sigma)
+      sigma=sigmas[j],
+      #Número de observações (ou blocos) em cada tratamentos
+      observations=50,
+      #Em porcentagem ("missings=1" = 1% de y vai receber NA de forma aleatória)
+      missings=percentage[i],
+      #Quantidades de grupos que o teste deveria retornar
+      groups=10
+    )
+    names(result2)[i]<-paste0("Missings= ",percentage[i],"%","; Sigma= ",sigmas[j])
+    #Avaliando o progresso
+    print(paste0(i," (",round(i/length(percentage)*100),"%)"))
+  }
+  result[[j]]<-result2
+  names(result)[j]<-paste0("Sigma= ",sigmas[j])
+}
+result
+
+#Olhando o resultado
+quero<-result
+
+##Pegando apenas o que quero (acertos) e imprimindo tabularmente
+a<-matrix(0,nrow=2+length(quero),ncol=length(quero[[1]])*3+1)
+a[1,1]<-c("Sigma/Missing")
+a[2,1]<-c("-")
+#Nomeando os Sigmas
+for(i in 1:length(quero)){
+  a[i+2,1]<-str_split(names(quero)[i],fixed(' '))[[1]][2]
+}
+#Nomeando as porcentagens
+pega<-c()
+for(i in 1:length(quero[[1]])){
+  pega[i]<-str_split(str_split(names(quero[[1]])[i], fixed(';'))[[1]][1],fixed(' '))[[1]][2]
+}
+pega<-rep(pega,1,each = 3)
+for(i in 1:length(pega)){
+  a[1,i+1]<-pega[i]
+}
+#Nomeando o métodos
+pega<-rep(c("Original","Missing","Imputed"),length(quero[[1]]))
+for(i in 1:length(pega)){
+  a[2,i+1]<-pega[i]
+}
+
+
+#Original
+for (k in 1:3) {
+  #porcen
+  for (i in 1:length(quero[[1]])) {
+    #sigma
+    for (j in 1:length(quero)) {
+      #coletando
+      a[j+2,2+(3*(i-1))+(k-1)]<-quero[[j]][[i]][[k]][["groups=10"]]
+    }
+  }
+}
+#Imprimindo
+(b<-data.frame(a))
+
 ######################################################
 ######################################################
 ######################################################
@@ -289,24 +793,51 @@ for(i in 1:length(porcentagem)){
   print(data.frame(Treatment=x$Treatment,Original=x$Original,Missing=x$Missing,Imputed=x$Imputed))
 }
 ###Gráficos e Alpha:#######
-x<-dataset(taus=c(1,.9,-1,-.9),
+x<-dataset(taus=c(1,1,-1,-1),
            mu=1,
            sigma=.5,
            observations=4,
            missings=5,
            groups=2,
            seed=20)
-plotly_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
-plot_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
+data.frame(`Observação`=c(seq(1:4)),
+           Tratamento_1=data.frame(x[,c(1:2)]%>%filter(Treatment==1))[,1],
+           Tratamento_2=data.frame(x[,c(1:2)]%>%filter(Treatment==2))[,1],
+           Tratamento_3=data.frame(x[,c(1:2)]%>%filter(Treatment==3))[,1],
+           Tratamento_4=data.frame(x[,c(1:2)]%>%filter(Treatment==4))[,1])
 
 plotly_usk(usktest(Missing~Treatment,x,0,ANOVA=F))
 plot_usk(usktest(Missing~Treatment,x,0,ANOVA=F))
+
+plotly_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
+plot_usk(usktest(Missing~Treatment,x,1,ANOVA=F))
 
 plotly_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
 plot_usk(usktest(Missing~Treatment,x,.05,ANOVA=F))
 ###ANOVA e saída no Console:#######
 Com_Anova<-usktest(formula=Missing~Treatment,dataset=x,alpha=.05,ANOVA=T)
 Sem_Anova<-usktest(formula=Missing~Treatment,dataset=x,alpha=.05,ANOVA=F)
+###Mensagens de Erro###########
+x$Treatment_Character<-as.character(x$Treatment)
+x$Missing_factor<-as.factor(x$Missing)
+x$y_1Missing_NA<-x$Missing;x$y_1Missing_NA[x$Treatment==1]<-NA
+x$Treatment_unico<-as.factor(c("1"))
+
+usktest(Missing~Treatment+Imputed,x,.05,ANOVA=F)
+usktest(Missing_factor~Treatment_Character,x,.05,ANOVA=F)
+usktest(y_1Missing_NA~Treatment,x,.05,ANOVA=F)
+usktest(Missing~Treatment_unico,x,.05,ANOVA=F)
+###Muitos tratamentos###########
+set.seed(17)
+taus=c(seq(from=2, to=400, by=4))
+Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
+erro<-rnorm(3*length(taus),0,.5)
+y<-2+taus+erro
+y[round(runif(1,min=1,max=length(y)),0)]<-NA
+dados<-data.frame(y,Tratamento)
+
+plot_usk(usktest(y~Tratamento,dados,ANOVA=T))
+plotly_usk(usktest(y~Tratamento,dados,ANOVA=F))
 
 #####Verificando Iterações######################################
 verificando_iteracoes<-function(proporcao,n,d){
@@ -355,3 +886,20 @@ for(i in 1:12){
              seed=i )#round(runif(1, min = 0, max = 100),0))
   print(plot_usk(usktest(Missing~Treatment,x,0.05,ANOVA=F)))
 }
+###Verificando o impacto do sigma nos taus###############################################
+x<-dataset(taus=c(1,1,-1,-1),
+           mu=1,
+           sigma=.5,
+           observations=4,
+           missings=5,
+           groups=2,
+           seed=20)
+plotly_usk(usktest(Missing~Treatment,x,0.05,ANOVA=T))
+x<-dataset(taus=c(1,1,-1,-1),
+           mu=1,
+           sigma=3,
+           observations=1000,
+           missings=5,
+           groups=2,
+           seed=20)
+plotly_usk(usktest(Missing~Treatment,x,0.05,ANOVA=T))

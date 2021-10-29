@@ -3,7 +3,7 @@ Title: Unbalanced Scott-Knott (USK)
 Version: 1.0.0.0
 Authors@R: 
     c(person("Felipe","Ferreira",email="felipe179971@hotmail.com",role = c("aut", "cre")),
-    person("Eduardo ","Gomes",role = c("ctb")))
+    person("Eduardo ","Gomes",role = c("ths")))
 Description: This package are used to do the Scott-Knott cluster analysis (1974) for unbalanced designs proposed at 2017 (CONRADO, T. V; FERREIRA, D. F.; SCAPIM, C. A.; MALUF, W. R.).
 License: GPL-3
 Encoding: UTF-8
