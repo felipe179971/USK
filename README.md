@@ -11,7 +11,7 @@ D. F.; SCAPIM, C. A.; MALUF, W. R.). To learn more, see the article:
 
 ## Installation
 
-You can install the the development version from
+You can install the development version from
 [github](https://github.com/felipe179971/USK) with:
 
 ``` r
