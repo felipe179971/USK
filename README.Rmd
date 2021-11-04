@@ -37,12 +37,12 @@ This is a basic example which shows you how to solve a common problem:
 library(USK)
 ## basic example code
 taus=c(4,4,-4,-4,9,-9)
-Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
-erro<-rnorm(3*length(taus),0,1)
-y<-2+taus+erro
+treatment<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
+error<-rnorm(3*length(taus),0,1)
+y<-2+taus+error
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
-dados<-data.frame(y,Tratamento)
+dataset<-data.frame(y,treatment)
 
-plot_usk(usktest(y~Tratamento,dados,ANOVA = T))
+plot_usk(usktest(y~treatment,dataset,ANOVA = T))
 ```
 
