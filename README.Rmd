@@ -36,6 +36,7 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(USK)
 ## basic example code
+set.seed(3)
 taus=c(4,4,-4,-4,9,-9)
 treatment<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 error<-rnorm(3*length(taus),0,1)

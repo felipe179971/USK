@@ -26,6 +26,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(USK)
 ## basic example code
+set.seed(3)
 taus=c(4,4,-4,-4,9,-9)
 treatment<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 error<-rnorm(3*length(taus),0,1)
@@ -36,8 +37,8 @@ dataset<-data.frame(y,treatment)
 plot_usk(usktest(y~treatment,dataset,ANOVA = T))
 #> [1] "##########################ANOVA###########################"
 #>             Df Sum Sq Mean Sq F value   Pr(>F)    
-#> treatment    5  625.4  125.07   146.4 1.12e-09 ***
-#> Residuals   11    9.4    0.85                     
+#> treatment    5  671.1  134.22   201.6 1.98e-10 ***
+#> Residuals   11    7.3    0.67                     
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 1 observation deleted due to missingness
@@ -46,12 +47,12 @@ plot_usk(usktest(y~treatment,dataset,ANOVA = T))
 #> # Groups:   treatment [6]
 #>   treatment Group  Mean   min    max
 #>   <fct>     <fct> <dbl> <dbl>  <dbl>
-#> 1 trat 5    a     10.7  10.3  11.3  
-#> 2 trat 1    b      6.28  5.98  6.45 
-#> 3 trat 2    b      5.81  5.10  6.61 
-#> 4 trat 4    c     -1.52 -3.30 -0.552
-#> 5 trat 3    c     -3.09 -4.18 -2.00 
-#> 6 trat 6    d     -6.37 -6.87 -6.01
+#> 1 trat 5    a     10.5  10.0  11.2  
+#> 2 trat 2    b      6.36  5.71  7.12 
+#> 3 trat 1    b      5.47  5.04  6.09 
+#> 4 trat 4    c     -1.94 -3.15 -0.733
+#> 5 trat 3    c     -2.27 -3.22 -1.74 
+#> 6 trat 6    d     -7.58 -8.13 -6.97
 ```
 
 <img src="man/figures/README-example-1.png" width="90%" />
