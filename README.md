@@ -34,7 +34,7 @@ y<-2+taus+error
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dataset<-data.frame(y,treatment)
 
-plot_usk(usktest(y~treatment,dataset,ANOVA = T))
+test<-usktest(y~treatment,dataset)
 #> [1] "##########################ANOVA###########################"
 #>             Df Sum Sq Mean Sq F value   Pr(>F)    
 #> treatment    5  671.1  134.22   201.6 1.98e-10 ***
@@ -53,6 +53,14 @@ plot_usk(usktest(y~treatment,dataset,ANOVA = T))
 #> 4 trat 4    c     -1.94 -3.15 -0.733
 #> 5 trat 3    c     -2.27 -3.22 -1.74 
 #> 6 trat 6    d     -7.58 -8.13 -6.97
+##ggplot2
+plot_usk(test)
 ```
 
 <img src="man/figures/README-example-1.png" width="90%" />
+
+``` r
+##plotly
+#Run
+#plotly_usk(test)
+```

@@ -11,7 +11,7 @@
 #' @param alpha type I error the researcher can accept (the default is 0.05).
 #' @param ANOVA if TRUE (the default), print an ANOVA table.
 #'
-#' @return If \code{group=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
+#' @return If \code{ANOVA=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
 #' \itemize{
 #'  \item '\code{treatments}': the name of the 'treatments' parameter.
 #'  \item \code{group}: which group the treatment was classified.
@@ -29,6 +29,7 @@
 #'
 #' @examples
 #'
+#' set.seed(3)
 #' taus=c(4,4,-4,-4,9,-9)
 #' Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 #' erro<-rnorm(3*length(taus),0,1)
@@ -37,10 +38,11 @@
 #' dados<-data.frame(y,Tratamento)
 #'
 #' test<-usktest(y~Tratamento,dados)
-#' #plotly
-#' plotly_usk(test)
+#'
 #' #ggplot2
 #' plot_usk(test)
+#' #plotly
+#' plotly_usk(test)
 #'
 #'
 #' @import purrr dplyr

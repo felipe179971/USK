@@ -44,6 +44,12 @@ y<-2+taus+error
 y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dataset<-data.frame(y,treatment)
 
-plot_usk(usktest(y~treatment,dataset,ANOVA = T))
+test<-usktest(y~treatment,dataset)
+##ggplot2
+plot_usk(test)
+##plotly
+#Run
+#plotly_usk(test)
+
 ```
 
