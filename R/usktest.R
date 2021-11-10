@@ -42,7 +42,7 @@
 #' #ggplot2
 #' plot_usk(test)
 #' #plotly
-#' plotly_usk(test)
+#' #plotly_usk(test)
 #'
 #'
 #' @import purrr dplyr

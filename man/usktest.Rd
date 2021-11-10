@@ -17,7 +17,7 @@ usktest(formula, dataset, alpha = 0.05, ANOVA = TRUE)
 \item{ANOVA}{if TRUE (the default), print an ANOVA table.}
 }
 \value{
-If \code{group=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
+If \code{ANOVA=TRUE}, this function returns the ANOVA table and the Scott-Knott table that are a \code{data.frame} including 5 columns:
 \itemize{
 \item '\code{treatments}': the name of the 'treatments' parameter.
 \item \code{group}: which group the treatment was classified.
@@ -33,6 +33,7 @@ To learn more, see the \href{http://ref.scielo.org/ws792m}{article}.
 }
 \examples{
 
+set.seed(3)
 taus=c(4,4,-4,-4,9,-9)
 Tratamento<-as.factor(rep(c(paste("trat",seq(1:length(taus)))),3))
 erro<-rnorm(3*length(taus),0,1)
@@ -41,10 +42,11 @@ y[round(runif(1,min=1,max=length(y)),0)]<-NA
 dados<-data.frame(y,Tratamento)
 
 test<-usktest(y~Tratamento,dados)
-#plotly
-plotly_usk(test)
+
 #ggplot2
 plot_usk(test)
+#plotly
+#plotly_usk(test)
 
 
 }
