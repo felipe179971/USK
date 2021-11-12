@@ -84,14 +84,17 @@ usktest <-
       colnames(Result)[1]<-var2
 
       Resultado<-as.list(c(var1,var2,Result))
+      names(Resultado)[1:2] <- c("Variable of observations", "Variable of treatment")
       if(ANOVA==T){
         Anova<-summary(ANOVA(formula,dataset))
         print("##########################ANOVA###########################")
         print(Anova)
         print("#######################Scott-Knott########################")
         Resultado<-as.list(c(var1,var2,Anova,Result))
+        names(Resultado)[1:3] <- c("Variable of observations", "Variable of treatment", "ANOVA")
       }
-      print(Result[,-6])
+      print(subset(Result, select=-c(Ordem)))
+
       invisible(Resultado)
     }
   }
