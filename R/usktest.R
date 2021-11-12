@@ -60,6 +60,7 @@ usktest <-
   function(formula,dataset,alpha=0.05,ANOVA=TRUE){
     var1<-as.character(formula[[2]])
     var2<-as.character(formula[[3]])
+    #Checking for possible errors
     if(length(as.character(formula[[3]]))>1){
       verifications<-list(c(length(as.character(formula[[3]]))>1,"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'"))
     }else{
@@ -80,6 +81,7 @@ usktest <-
     if(count_errors>0){
       stop(paste(message))
     }else{
+      #Running the Modified Skott-Knott Test
       Result<-RUNscott(dataset,var1,var2,alpha,ANOVA(formula,dataset)[["df.residual"]],summary(ANOVA(formula,dataset))[[1]][["Mean Sq"]][[2]])
       colnames(Result)[1]<-var2
 
