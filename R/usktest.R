@@ -69,8 +69,7 @@ usktest <-
                     warning(paste0("The variable '",as.character(formula[[3]]),"' has been changed to format 'factor'"))
                     dataset[[var2]]<-as.factor(dataset[[var2]])
       }
-      verifications<-list(#c(is.factor(dataset[[var2]])==FALSE,paste0("The variable '",as.character(formula[[3]]),"' must be a factor")),
-                          c(is.numeric(dataset[[var1]])==FALSE,paste0("The variable '",as.character(formula[[2]]),"' must be numeric")),
+      verifications<-list(c(is.numeric(dataset[[var1]])==FALSE,paste0("The variable '",as.character(formula[[2]]),"' must be numeric")),
                           c(length(unique(dataset[[var2]]))<2,paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment")),
                           c(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0,paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
       )

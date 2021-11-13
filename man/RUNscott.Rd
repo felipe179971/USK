@@ -24,4 +24,5 @@ RUNscott(dataset, var1, var2, alpha, v, MSE)
 }
 \author{
 Felipe Ferreira
+Ordem' will only be used in the chart (do not print to the user)
 }

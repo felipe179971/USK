@@ -51,12 +51,17 @@
 
 plotly_usk <-
 function(test){
+    #Using ggplot2 as a base
     ggplot_usk<-plot_usk(test)
+    #Transforming ggplot2 into plotly
     graphic<-
       ggplotly(ggplot_usk,tooltip = c("Treatment","x","Group"))%>%
+      #Centering the title
       layout(title = "Scott-Knott",
+             #Customizing the labels and caption
              xaxis = list(title = "Mean",titlefont=list(family = "Courier New, monospace",size = 18,color = "#7f7f7f")),
              yaxis = list(title = ""),
              showlegend = T)
+    #Returning the graphic
     return(graphic)
   }

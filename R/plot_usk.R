@@ -51,14 +51,24 @@
 
 plot_usk <-
 function(test){
+    #Transforming the modified Skott-Knott result into data.frame
     data<-as.data.frame(test[c(test[[2]],"Group","Mean","min","max","Ordem")])
+    #Setting the default Treatments name to 'Treatment'
     colnames(data)[1]<-c("Treatment")
+    #Generating the graph
     graphic<-data%>%
+      #Empty grid containing coordinates
       ggplot(aes(Treatment=Treatment,y=Ordem, x=`Mean`,color=Group)) +
+      #Adding the points (averages) and caption block
       geom_point() +
+      #Customizing the labels
       scale_y_continuous(breaks=c(data$Ordem),labels=c(as.character(data[,1])),name=test[[2]])+
+      #Adding range (minimum to maximum)
       geom_errorbar(aes(xmin=min,xmax=max),width = 0.2,size  = 0.7) +
+      #Setting the theme
       theme_bw()+
+      #Title
       labs(title = "Scott-Knott")
+    #Returning the graphic
     return(graphic)
   }
