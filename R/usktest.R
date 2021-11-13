@@ -64,7 +64,12 @@ usktest <-
     if(length(as.character(formula[[3]]))>1){
       verifications<-list(c(length(as.character(formula[[3]]))>1,"At the moment, this package only does the Unbalanced Scott-Knott for single factor analysis of variance, so your 'formula' must be 'observation ~ treatment'"))
     }else{
-      verifications<-list(c(is.factor(dataset[[var2]])==FALSE,paste0("The variable '",as.character(formula[[3]]),"' must be a factor")),
+
+      if(is.factor(dataset[[var2]])==FALSE){
+                    warning(paste0("The variable '",as.character(formula[[3]]),"' has been changed to format 'factor'"))
+                    dataset[[var2]]<-as.factor(dataset[[var2]])
+      }
+      verifications<-list(#c(is.factor(dataset[[var2]])==FALSE,paste0("The variable '",as.character(formula[[3]]),"' must be a factor")),
                           c(is.numeric(dataset[[var1]])==FALSE,paste0("The variable '",as.character(formula[[2]]),"' must be numeric")),
                           c(length(unique(dataset[[var2]]))<2,paste0("The variable '",as.character(formula[[3]]),"' must have more than 1 type of treatment")),
                           c(sum(tapply(dataset[[var1]],dataset[[var2]],function(x){sum(is.na(x))})==table(dataset[[var2]]))>0,paste0("All '",as.character(formula[[3]]),"' must have more than 1 observations"))
@@ -87,6 +92,7 @@ usktest <-
 
       Resultado<-as.list(c(var1,var2,Result))
       names(Resultado)[1:2] <- c("Variable of observations", "Variable of treatment")
+      #Running the ANOVA Test (if the user wants to)
       if(ANOVA==T){
         Anova<-summary(ANOVA(formula,dataset))
         print("##########################ANOVA###########################")
@@ -95,8 +101,9 @@ usktest <-
         Resultado<-as.list(c(var1,var2,Anova,Result))
         names(Resultado)[1:3] <- c("Variable of observations", "Variable of treatment", "ANOVA")
       }
+      #Printing the results in the form of tables
       print(subset(Result, select=-c(Ordem)))
-
+      #Returning results in unprinted 'list ′ format
       invisible(Resultado)
     }
   }
